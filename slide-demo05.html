@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #0f172a; margin: 0; }
+  .slide { width: 1200px; height: 1500px; background: #0f172a; display: flex; flex-direction: column; overflow: hidden; padding: 0 32px; }
+  .top-bar { height: 6px; margin: 0 -32px; background: linear-gradient(90deg, #0D9488, #10B981, #0D9488); flex-shrink: 0; }
+  .header { padding: 40px 0 24px; flex-shrink: 0; }
+  .chapter-label { font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #ec4899; margin-bottom: 12px; }
+  .demo-title { font-size: 72px; font-weight: 900; color: #fff; line-height: 1.0; margin-bottom: 14px; }
+  .demo-subtitle { font-size: 26px; color: #cbd5e1; line-height: 1.35; }
+  .browser-mockup { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,0.25); flex-shrink: 0; }
+  .browser-bar { height: 40px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; padding: 0 16px; gap: 7px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dr { background: #ef4444; } .dy { background: #f59e0b; } .dg { background: #10b981; }
+  .burl { margin-left: 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 12px; font-size: 12px; color: #94a3b8; }
+  .burl span { color: #0D9488; font-weight: 600; }
+  .demo-content { padding: 24px; }
+  .pattern-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+  .ptab { padding: 10px 20px; border-radius: 10px; border: 2px solid #e2e8f0; font-size: 15px; font-weight: 700; color: #334155; background: #f8fafc; }
+  .ptab.active { border-color: #ec4899; background: rgba(236,72,153,0.08); color: #be185d; }
+  /* Inline approval */
+  .approval-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 20px; }
+  .approval-title { font-size: 15px; font-weight: 700; color: #334155; margin-bottom: 6px; }
+  .approval-desc { font-size: 14px; color: #64748b; margin-bottom: 12px; line-height: 1.5; }
+  .approval-details { background: #f1f5f9; border-radius: 8px; padding: 12px; margin-bottom: 16px; }
+  .detail-item { font-size: 13px; color: #64748b; margin-bottom: 3px; }
+  .btn-row { display: flex; gap: 10px; }
+  .btn { padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 700; border: none; }
+  .btn-primary { background: #ec4899; color: white; }
+  .btn-outline { background: #fff; color: #475569; border: 1.5px solid #cbd5e1; }
+  /* Toast */
+  .toast-bar { background: #0f172a; color: white; border-radius: 10px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; margin-top: 16px; }
+  .toast-text { font-size: 14px; }
+  .toast-actions { display: flex; gap: 12px; }
+  .toast-link { font-size: 14px; font-weight: 600; color: #ec4899; }
+  .toast-dismiss { font-size: 14px; color: rgba(255,255,255,0.5); }
+  .cards-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; flex-shrink: 0; }
+  .card { background: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155; }
+  .card-label { font-size: 15px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .card-value { font-size: 56px; font-weight: 900; color: #ec4899; line-height: 1; }
+  .card-desc { font-size: 17px; color: #94a3b8; margin-top: 10px; line-height: 1.4; }
+  .badges-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 16px; flex-shrink: 0; }
+  .badge { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 12px; }
+  .badge-dot { width: 10px; height: 10px; border-radius: 50%; background: #ec4899; flex-shrink: 0; }
+  .badge-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .badge-value { font-size: 20px; font-weight: 800; color: #fff; }
+  .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; flex: 1; }
+  .how { background: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155; display: flex; flex-direction: column; justify-content: center; }
+  .hwt { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .hws { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px; }
+  .hwn { width: 36px; height: 36px; background: #ec4899; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: #fff; flex-shrink: 0; }
+  .hwx { font-size: 18px; color: #cbd5e1; line-height: 1.45; }
+  .hwx strong { color: #fff; }
+  .tk { background: rgba(236,72,153,0.08); border: 1.5px solid rgba(236,72,153,0.2); border-radius: 16px; padding: 36px; display: flex; flex-direction: column; justify-content: center; }
+  .tki { font-size: 44px; margin-bottom: 16px; }
+  .tkl { font-size: 16px; font-weight: 800; color: #ec4899; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .tkt { font-size: 26px; font-weight: 600; color: #e2e8f0; line-height: 1.4; }
+  .footer { padding: 20px 0; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .author { display: flex; align-items: center; gap: 12px; }
+  .adot { width: 10px; height: 10px; background: #0D9488; border-radius: 50%; }
+  .an { font-size: 20px; font-weight: 700; color: #fff; }
+  .ah { font-size: 15px; color: #64748b; }
+  .pn { font-size: 20px; font-weight: 800; color: #475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-bar"></div>
+  <div class="header">
+    <div class="chapter-label">Chapter 02 — Who's In Control?</div>
+    <div class="demo-title">Approval Flows</div>
+    <div class="demo-subtitle">How should an agent ask permission? The pattern affects trust and flow.</div>
+  </div>
+  <div class="browser-mockup">
+    <div class="browser-bar">
+      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+      <div class="burl"><span>janamaia.com</span>/lab/control#approval</div>
+    </div>
+    <div class="demo-content">
+      <div class="pattern-tabs">
+        <div class="ptab active">Inline</div>
+        <div class="ptab">Modal</div>
+        <div class="ptab">Toast</div>
+      </div>
+      <div class="approval-card">
+        <div class="approval-title">Agent wants to: Schedule team standup</div>
+        <div class="approval-desc">Create a recurring 15-min standup every weekday at 9:00 AM with the Design team (6 people).</div>
+        <div class="approval-details">
+          <div class="detail-item">• Calendar: Design Team</div>
+          <div class="detail-item">• Duration: 15 minutes</div>
+          <div class="detail-item">• Recurrence: Mon-Fri</div>
+          <div class="detail-item">• Invitees: 6 team members</div>
+        </div>
+        <div class="btn-row">
+          <div class="btn btn-primary">Approve</div>
+          <div class="btn btn-outline">Reject</div>
+        </div>
+      </div>
+      <div class="toast-bar">
+        <div class="toast-text">Standup scheduled for tomorrow 9 AM</div>
+        <div class="toast-actions">
+          <div class="toast-link">Undo</div>
+          <div class="toast-dismiss">Dismiss</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cards-row">
+    <div class="card">
+      <div class="card-label">Patterns</div>
+      <div class="card-value">3</div>
+      <div class="card-desc">Inline, Modal, and Toast — each for different risk levels</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Decision Rule</div>
+      <div class="card-value" style="font-size:32px">Risk Matrix</div>
+      <div class="card-desc">Reversibility × Impact determines the pattern</div>
+    </div>
+  </div>
+  <div class="badges-row">
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Inline</div><div class="badge-value">In Context</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Modal</div><div class="badge-value">Full Focus</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Toast</div><div class="badge-value">Post-Action</div></div></div>
+  </div>
+  <div class="bottom-row">
+    <div class="how">
+      <div class="hwt">How It Works</div>
+      <div class="hws"><div class="hwn">1</div><div class="hwx"><strong>Switch patterns</strong> — inline, modal, or toast</div></div>
+      <div class="hws"><div class="hwn">2</div><div class="hwx"><strong>Approve or reject</strong> — see how each pattern handles it</div></div>
+      <div class="hws"><div class="hwn">3</div><div class="hwx"><strong>Match to risk</strong> — irreversible = modal, low-risk = toast</div></div>
+    </div>
+    <div class="tk">
+      <div class="tki">💡</div>
+      <div class="tkl">Design Insight</div>
+      <div class="tkt">Never let an agent take irreversible action without explicit confirmation. Map every action to a risk matrix.</div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="author"><div class="adot"></div><div><div class="an">Jana Maia</div><div class="ah">janamaia.com/lab</div></div></div>
+    <div class="pn">6 / 14</div>
+  </div>
+</div>
+</body>
+</html>

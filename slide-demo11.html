@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #0f172a; margin: 0; }
+  .slide { width: 1200px; height: 1500px; background: #0f172a; display: flex; flex-direction: column; overflow: hidden; padding: 0 32px; }
+  .top-bar { height: 6px; margin: 0 -32px; background: linear-gradient(90deg, #0D9488, #10B981, #0D9488); flex-shrink: 0; }
+  .header { padding: 40px 0 24px; flex-shrink: 0; }
+  .chapter-label { font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #fb923c; margin-bottom: 12px; }
+  .demo-title { font-size: 68px; font-weight: 900; color: #fff; line-height: 1.0; margin-bottom: 14px; }
+  .demo-subtitle { font-size: 24px; color: #cbd5e1; line-height: 1.35; }
+  .browser-mockup { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,0.25); flex-shrink: 0; }
+  .browser-bar { height: 40px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; padding: 0 16px; gap: 7px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dr { background: #ef4444; } .dy { background: #f59e0b; } .dg { background: #10b981; }
+  .burl { margin-left: 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 12px; font-size: 12px; color: #94a3b8; }
+  .burl span { color: #0D9488; font-weight: 600; }
+  .demo-content { padding: 20px; }
+  /* Doc selector */
+  .doc-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .doc-btn { padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; text-align: left; }
+  .doc-btn.active { border-color: #fb923c; background: rgba(251,146,60,0.06); }
+  .doc-icon { font-size: 28px; margin-bottom: 6px; }
+  .doc-name { font-size: 15px; font-weight: 700; color: #334155; }
+  .doc-hint { font-size: 11px; color: #94a3b8; }
+  /* Constraints */
+  .constraint { display: flex; align-items: start; gap: 10px; padding: 10px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; }
+  .sev-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .sev-high { background: #ef4444; }
+  .sev-med { background: #f59e0b; }
+  .sev-low { background: #22c55e; }
+  .const-text { font-size: 13px; color: #334155; }
+  .const-sev { font-size: 10px; color: #94a3b8; text-transform: capitalize; }
+  /* Sensitivity + workflow */
+  .sensitivity-row { display: flex; align-items: center; gap: 12px; margin: 16px 0 12px; }
+  .sens-label { font-size: 13px; font-weight: 700; color: #334155; }
+  .sens-bar { flex: 1; height: 8px; background: #e2e8f0; border-radius: 4px; position: relative; }
+  .sens-fill { height: 100%; background: linear-gradient(90deg, #22c55e, #f59e0b, #ef4444); border-radius: 4px; width: 66%; }
+  .sens-labels { display: flex; justify-content: space-between; font-size: 10px; color: #94a3b8; }
+  .workflow-badges { display: flex; gap: 8px; margin-bottom: 12px; }
+  .wb { padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; font-family: monospace; border: 1px solid #e2e8f0; }
+  /* Workflow steps */
+  .wf-step { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .wf-icon { font-size: 14px; width: 20px; text-align: center; }
+  .wf-card { flex: 1; padding: 8px 12px; border-radius: 8px; border: 1.5px solid #e2e8f0; font-size: 12px; }
+  .wf-card.gate { background: #fefce8; border-color: #fcd34d; }
+  .wf-name { font-weight: 700; color: #334155; }
+  .wf-note { color: #94a3b8; font-size: 11px; }
+  .wf-gate-badge { font-size: 9px; font-weight: 700; color: #92400e; background: #fef3c7; border: 1px solid #fcd34d; padding: 1px 6px; border-radius: 4px; margin-left: 8px; }
+  .cards-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; flex-shrink: 0; }
+  .card { background: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155; }
+  .card-label { font-size: 15px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .card-value { font-size: 56px; font-weight: 900; color: #fb923c; line-height: 1; }
+  .card-desc { font-size: 17px; color: #94a3b8; margin-top: 10px; line-height: 1.4; }
+  .badges-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 16px; flex-shrink: 0; }
+  .badge { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 12px; }
+  .badge-dot { width: 10px; height: 10px; border-radius: 50%; background: #fb923c; flex-shrink: 0; }
+  .badge-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .badge-value { font-size: 20px; font-weight: 800; color: #fff; }
+  .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; flex: 1; }
+  .how { background: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155; display: flex; flex-direction: column; justify-content: center; }
+  .hwt { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .hws { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px; }
+  .hwn { width: 36px; height: 36px; background: #fb923c; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: #fff; flex-shrink: 0; }
+  .hwx { font-size: 18px; color: #cbd5e1; line-height: 1.45; }
+  .hwx strong { color: #fff; }
+  .tk { background: rgba(251,146,60,0.08); border: 1.5px solid rgba(251,146,60,0.2); border-radius: 16px; padding: 36px; display: flex; flex-direction: column; justify-content: center; }
+  .tki { font-size: 44px; margin-bottom: 16px; }
+  .tkl { font-size: 16px; font-weight: 800; color: #fb923c; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .tkt { font-size: 26px; font-weight: 600; color: #e2e8f0; line-height: 1.4; }
+  .footer { padding: 20px 0; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .author { display: flex; align-items: center; gap: 12px; }
+  .adot { width: 10px; height: 10px; background: #0D9488; border-radius: 50%; }
+  .an { font-size: 20px; font-weight: 700; color: #fff; }
+  .ah { font-size: 15px; color: #64748b; }
+  .pn { font-size: 20px; font-weight: 800; color: #475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-bar"></div>
+  <div class="header">
+    <div class="chapter-label">Chapter 03 — Does It Learn?</div>
+    <div class="demo-title">Domain-Aware AI</div>
+    <div class="demo-subtitle">How a domain document transforms an agent's entire workflow.</div>
+  </div>
+  <div class="browser-mockup">
+    <div class="browser-bar">
+      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+      <div class="burl"><span>janamaia.com</span>/lab/learning#domain</div>
+    </div>
+    <div class="demo-content">
+      <div class="doc-selector">
+        <div class="doc-btn active"><div class="doc-icon">🏗️</div><div class="doc-name">Geotechnical Report</div><div class="doc-hint">Click to analyze</div></div>
+        <div class="doc-btn"><div class="doc-icon">📋</div><div class="doc-name">Planning Regulation</div><div class="doc-hint">Click to analyze</div></div>
+      </div>
+      <div class="constraint"><div class="sev-dot sev-high"></div><div><div class="const-text">Reactive clay — Class H site</div><div class="const-sev">High impact</div></div></div>
+      <div class="constraint"><div class="sev-dot sev-high"></div><div><div class="const-text">Water table at 2.1m — dewatering needed</div><div class="const-sev">High impact</div></div></div>
+      <div class="constraint"><div class="sev-dot sev-low"></div><div><div class="const-text">Bearing capacity 120 kPa — standard footings OK</div><div class="const-sev">Low impact</div></div></div>
+      <div class="constraint"><div class="sev-dot sev-med"></div><div><div class="const-text">Fill material to 1.5m — engineer review needed</div><div class="const-sev">Medium impact</div></div></div>
+      <div class="sensitivity-row">
+        <div class="sens-label">Sensitivity</div>
+        <div class="sens-bar"><div class="sens-fill"></div></div>
+      </div>
+      <div class="sens-labels"><span>Relaxed</span><span>Strict</span></div>
+      <div class="workflow-badges"><div class="wb">5 STEPS</div><div class="wb">4 REVIEW GATES</div><div class="wb" style="color:#ef4444;border-color:#fca5a5;">HIGH</div></div>
+      <div class="wf-step"><div class="wf-icon">⊘</div><div class="wf-card gate"><span class="wf-name">Supplementary Investigation</span><span class="wf-gate-badge">Review Gate</span><div class="wf-note">Additional boreholes</div></div></div>
+      <div class="wf-step"><div class="wf-icon">⊘</div><div class="wf-card gate"><span class="wf-name">Foundation Design</span><span class="wf-gate-badge">Review Gate</span><div class="wf-note">RPEng certification</div></div></div>
+      <div class="wf-step"><div class="wf-icon">⊘</div><div class="wf-card gate"><span class="wf-name">Dewatering Plan</span><span class="wf-gate-badge">Review Gate</span><div class="wf-note">Environmental approval</div></div></div>
+    </div>
+  </div>
+  <div class="cards-row">
+    <div class="card">
+      <div class="card-label">Domains</div>
+      <div class="card-value">2</div>
+      <div class="card-desc">Geotechnical and Planning — each with unique constraints</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Key Feature</div>
+      <div class="card-value" style="font-size:32px">Sensitivity</div>
+      <div class="card-desc">Slider controls how strict the review gates are</div>
+    </div>
+  </div>
+  <div class="badges-row">
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Extract</div><div class="badge-value">Auto</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Gates</div><div class="badge-value">Dynamic</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Workflow</div><div class="badge-value">Adaptive</div></div></div>
+  </div>
+  <div class="bottom-row">
+    <div class="how">
+      <div class="hwt">How It Works</div>
+      <div class="hws"><div class="hwn">1</div><div class="hwx"><strong>Upload a document</strong> — agent extracts constraints automatically</div></div>
+      <div class="hws"><div class="hwn">2</div><div class="hwx"><strong>Adjust sensitivity</strong> — relaxed to strict regulation</div></div>
+      <div class="hws"><div class="hwn">3</div><div class="hwx"><strong>See the workflow</strong> — review gates adapt to constraints</div></div>
+    </div>
+    <div class="tk">
+      <div class="tki">💡</div>
+      <div class="tkl">Design Insight</div>
+      <div class="tkt">A domain-aware agent doesn't just answer differently — it changes its entire workflow based on constraints.</div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="author"><div class="adot"></div><div><div class="an">Jana Maia</div><div class="ah">janamaia.com/lab</div></div></div>
+    <div class="pn">12 / 14</div>
+  </div>
+</div>
+</body>
+</html>

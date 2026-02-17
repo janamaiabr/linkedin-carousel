@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #0f172a; margin: 0; }
+  .slide { width: 1200px; height: 1500px; background: #0f172a; display: flex; flex-direction: column; overflow: hidden; padding: 0 32px; }
+  .top-bar { height: 6px; margin: 0 -32px; background: linear-gradient(90deg, #0D9488, #10B981, #0D9488); flex-shrink: 0; }
+  .header { padding: 40px 0 24px; flex-shrink: 0; }
+  .chapter-label { font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #a855f7; margin-bottom: 12px; }
+  .demo-title { font-size: 68px; font-weight: 900; color: #fff; line-height: 1.0; margin-bottom: 14px; }
+  .demo-subtitle { font-size: 24px; color: #cbd5e1; line-height: 1.35; }
+  .browser-mockup { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,0.25); flex-shrink: 0; }
+  .browser-bar { height: 40px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; padding: 0 16px; gap: 7px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dr { background: #ef4444; } .dy { background: #f59e0b; } .dg { background: #10b981; }
+  .burl { margin-left: 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 12px; font-size: 12px; color: #94a3b8; }
+  .burl span { color: #0D9488; font-weight: 600; }
+  .demo-content { padding: 24px; }
+  /* Scenario tabs */
+  .scenario-tabs { display: flex; gap: 10px; margin-bottom: 16px; }
+  .stab { padding: 10px 16px; border-radius: 10px; border: 2px solid #e2e8f0; font-size: 14px; font-weight: 700; color: #334155; background: #f8fafc; }
+  .stab.active { border-color: #a855f7; background: rgba(168,85,247,0.08); color: #7c3aed; }
+  /* Two agent cards side by side */
+  .agents-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .agent-card { border-radius: 10px; padding: 14px; border: 2px solid; }
+  .agent-a { border-color: #c4b5fd; background: rgba(168,85,247,0.04); }
+  .agent-b { border-color: #fbcfe8; background: rgba(236,72,153,0.04); }
+  .agent-name { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+  .agent-a .agent-name { color: #7c3aed; }
+  .agent-b .agent-name { color: #be185d; }
+  .agent-conf { font-size: 10px; font-family: monospace; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 8px; }
+  .agent-a .agent-conf { background: rgba(168,85,247,0.1); color: #7c3aed; border: 1px solid #c4b5fd; }
+  .agent-b .agent-conf { background: rgba(236,72,153,0.1); color: #be185d; border: 1px solid #fbcfe8; }
+  .agent-text { font-size: 12px; color: #475569; line-height: 1.5; }
+  /* Conflict divider */
+  .conflict-divider { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .conflict-line { flex: 1; height: 2px; background: linear-gradient(to right, #c4b5fd, #fbcfe8); }
+  .conflict-badge { background: #fef3c7; border: 1.5px solid #fcd34d; border-radius: 20px; padding: 4px 14px; font-size: 10px; font-weight: 700; color: #92400e; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  /* Resolution options */
+  .resolution-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .res-option { padding: 12px; border-radius: 10px; border: 2px solid #e2e8f0; }
+  .res-title { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+  .res-desc { font-size: 11px; color: #94a3b8; }
+  .res-a { border-color: #c4b5fd; } .res-a .res-title { color: #7c3aed; }
+  .res-b { border-color: #fbcfe8; } .res-b .res-title { color: #be185d; }
+  .res-merge { border-color: #93c5fd; } .res-merge .res-title { color: #2563eb; }
+  .res-escalate { border-color: #fcd34d; } .res-escalate .res-title { color: #d97706; }
+  .cards-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; flex-shrink: 0; }
+  .card { background: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155; }
+  .card-label { font-size: 15px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .card-value { font-size: 56px; font-weight: 900; color: #a855f7; line-height: 1; }
+  .card-desc { font-size: 17px; color: #94a3b8; margin-top: 10px; line-height: 1.4; }
+  .badges-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-top: 16px; flex-shrink: 0; }
+  .badge { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 12px; }
+  .badge-dot { width: 10px; height: 10px; border-radius: 50%; background: #a855f7; flex-shrink: 0; }
+  .badge-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .badge-value { font-size: 20px; font-weight: 800; color: #fff; }
+  .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; flex: 1; }
+  .how { background: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155; display: flex; flex-direction: column; justify-content: center; }
+  .hwt { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .hws { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px; }
+  .hwn { width: 36px; height: 36px; background: #a855f7; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: #fff; flex-shrink: 0; }
+  .hwx { font-size: 18px; color: #cbd5e1; line-height: 1.45; }
+  .hwx strong { color: #fff; }
+  .tk { background: rgba(168,85,247,0.08); border: 1.5px solid rgba(168,85,247,0.2); border-radius: 16px; padding: 36px; display: flex; flex-direction: column; justify-content: center; }
+  .tki { font-size: 44px; margin-bottom: 16px; }
+  .tkl { font-size: 16px; font-weight: 800; color: #a855f7; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .tkt { font-size: 26px; font-weight: 600; color: #e2e8f0; line-height: 1.4; }
+  .footer { padding: 20px 0; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .author { display: flex; align-items: center; gap: 12px; }
+  .adot { width: 10px; height: 10px; background: #0D9488; border-radius: 50%; }
+  .an { font-size: 20px; font-weight: 700; color: #fff; }
+  .ah { font-size: 15px; color: #64748b; }
+  .pn { font-size: 20px; font-weight: 800; color: #475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-bar"></div>
+  <div class="header">
+    <div class="chapter-label">Chapter 02 — Who's In Control?</div>
+    <div class="demo-title">Conflict Resolution</div>
+    <div class="demo-subtitle">When agents disagree, the user becomes the judge. Design for transparent disagreement.</div>
+  </div>
+  <div class="browser-mockup">
+    <div class="browser-bar">
+      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+      <div class="burl"><span>janamaia.com</span>/lab/control#conflict</div>
+    </div>
+    <div class="demo-content">
+      <div class="scenario-tabs">
+        <div class="stab active">💰 Investment Strategy</div>
+        <div class="stab">🏥 Medical Triage</div>
+        <div class="stab">👥 Candidate Evaluation</div>
+      </div>
+      <div class="agents-grid">
+        <div class="agent-card agent-a">
+          <div class="agent-name">Risk Analyst Agent</div>
+          <div class="agent-conf">78%</div>
+          <div class="agent-text">Sell 30% of tech holdings. Market volatility indicators are elevated. Historical patterns suggest a 15-20% correction within 6 months.</div>
+        </div>
+        <div class="agent-card agent-b">
+          <div class="agent-name">Growth Analyst Agent</div>
+          <div class="agent-conf">72%</div>
+          <div class="agent-text">Hold current positions and increase tech allocation by 10%. AI sector momentum is strong with earnings beats across the board.</div>
+        </div>
+      </div>
+      <div class="conflict-divider">
+        <div class="conflict-line"></div>
+        <div class="conflict-badge">⚡ CONFLICT DETECTED</div>
+        <div class="conflict-line"></div>
+      </div>
+      <div class="resolution-grid">
+        <div class="res-option res-a"><div class="res-title">✋ Override — Accept Agent A</div><div class="res-desc">Go with Risk Analyst's recommendation</div></div>
+        <div class="res-option res-b"><div class="res-title">✋ Override — Accept Agent B</div><div class="res-desc">Go with Growth Analyst's recommendation</div></div>
+        <div class="res-option res-merge"><div class="res-title">🔀 Merge — Combine Both</div><div class="res-desc">Find middle ground between both</div></div>
+        <div class="res-option res-escalate"><div class="res-title">⬆️ Escalate — Human Expert</div><div class="res-desc">Send to human expert for final decision</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="cards-row">
+    <div class="card">
+      <div class="card-label">Scenarios</div>
+      <div class="card-value">3</div>
+      <div class="card-desc">Investment, Medical, Hiring — each with competing agents</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Resolution Types</div>
+      <div class="card-value">4</div>
+      <div class="card-desc">Override A, Override B, Merge, or Escalate to human</div>
+    </div>
+  </div>
+  <div class="badges-row">
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Threshold</div><div class="badge-value">±20%</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Mode</div><div class="badge-value">Transparent</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Audit</div><div class="badge-value">Logged</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Fallback</div><div class="badge-value">Escalate</div></div></div>
+  </div>
+  <div class="bottom-row">
+    <div class="how">
+      <div class="hwt">How It Works</div>
+      <div class="hws"><div class="hwn">1</div><div class="hwx"><strong>See the conflict</strong> — two agents, two opinions, side by side</div></div>
+      <div class="hws"><div class="hwn">2</div><div class="hwx"><strong>Choose resolution</strong> — override, merge, or escalate</div></div>
+      <div class="hws"><div class="hwn">3</div><div class="hwx"><strong>Toggle transparency</strong> — see what happens when conflicts are hidden</div></div>
+    </div>
+    <div class="tk">
+      <div class="tki">💡</div>
+      <div class="tkl">Design Insight</div>
+      <div class="tkt">Most multi-agent systems hide disagreement. Transparency is a feature, not a bug.</div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="author"><div class="adot"></div><div><div class="an">Jana Maia</div><div class="ah">janamaia.com/lab</div></div></div>
+    <div class="pn">9 / 14</div>
+  </div>
+</div>
+</body>
+</html>

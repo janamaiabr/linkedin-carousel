@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #0f172a; margin: 0; }
+  .slide { width: 1200px; height: 1500px; background: #0f172a; display: flex; flex-direction: column; overflow: hidden; padding: 0 32px; }
+  .top-bar { height: 6px; margin: 0 -32px; background: linear-gradient(90deg, #0D9488, #10B981, #0D9488); flex-shrink: 0; }
+  .header { padding: 40px 0 24px; flex-shrink: 0; }
+  .chapter-label { font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #a855f7; margin-bottom: 12px; }
+  .demo-title { font-size: 56px; font-weight: 900; color: #fff; line-height: 1.0; margin-bottom: 14px; }
+  .demo-subtitle { font-size: 24px; color: #cbd5e1; line-height: 1.35; }
+  .browser-mockup { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,0.25); flex-shrink: 0; }
+  .browser-bar { height: 40px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; padding: 0 16px; gap: 7px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dr { background: #ef4444; } .dy { background: #f59e0b; } .dg { background: #10b981; }
+  .burl { margin-left: 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 12px; font-size: 12px; color: #94a3b8; }
+  .burl span { color: #0D9488; font-weight: 600; }
+  .demo-content { padding: 20px; background: #f8fafc; }
+  /* Dashboard header */
+  .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .dash-title { font-size: 16px; font-weight: 700; color: #0f172a; }
+  .dash-sub { font-size: 11px; color: #64748b; }
+  .drift-badge { display: flex; align-items: center; gap: 6px; font-size: 11px; font-family: monospace; }
+  .drift-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
+  .drift-text { color: #16a34a; font-weight: 700; }
+  /* Grid layout */
+  .dash-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 12px; }
+  /* Activity feed */
+  .feed { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; max-height: 180px; overflow: hidden; }
+  .feed-title { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+  .feed-row { display: flex; align-items: center; gap: 8px; font-size: 11px; padding: 5px 0; border-bottom: 1px solid #f1f5f9; }
+  .feed-time { color: #94a3b8; font-family: monospace; width: 56px; flex-shrink: 0; }
+  .feed-action { flex: 1; color: #475569; }
+  .feed-status { font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+  .fs-completed { background: #dcfce7; color: #16a34a; }
+  .fs-overridden { background: #fee2e2; color: #dc2626; }
+  .feed-conf { font-size: 9px; font-family: monospace; color: #94a3b8; width: 30px; text-align: right; }
+  /* Side panels */
+  .side-panels { display: flex; flex-direction: column; gap: 12px; }
+  .panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; text-align: center; }
+  .panel-title { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+  /* Donut */
+  .donut-val { font-size: 32px; font-weight: 900; color: #a855f7; }
+  .donut-label { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+  /* Drift bar */
+  .drift-bars { display: flex; gap: 4px; margin-bottom: 6px; }
+  .drift-bar { flex: 1; height: 8px; border-radius: 4px; }
+  .drift-green { background: #22c55e; }
+  .drift-off { background: #e2e8f0; }
+  .drift-desc { font-size: 10px; color: #64748b; }
+  /* Bottom grid */
+  .dash-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .chart-panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; }
+  .bar-chart { display: flex; align-items: end; gap: 6px; height: 60px; }
+  .bar { flex: 1; border-radius: 4px 4px 0 0; background: rgba(168,85,247,0.7); }
+  .bar-labels { display: flex; justify-content: space-between; font-size: 8px; color: #94a3b8; margin-top: 4px; }
+  .correction { font-size: 11px; color: #475569; margin-bottom: 6px; display: flex; gap: 8px; }
+  .corr-time { color: #94a3b8; font-family: monospace; width: 40px; flex-shrink: 0; }
+  .cards-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; flex-shrink: 0; }
+  .card { background: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155; }
+  .card-label { font-size: 15px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .card-value { font-size: 56px; font-weight: 900; color: #a855f7; line-height: 1; }
+  .card-desc { font-size: 17px; color: #94a3b8; margin-top: 10px; line-height: 1.4; }
+  .badges-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 16px; flex-shrink: 0; }
+  .badge { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 12px; }
+  .badge-dot { width: 10px; height: 10px; border-radius: 50%; background: #a855f7; flex-shrink: 0; }
+  .badge-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .badge-value { font-size: 20px; font-weight: 800; color: #fff; }
+  .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; flex: 1; }
+  .how { background: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155; display: flex; flex-direction: column; justify-content: center; }
+  .hwt { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .hws { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px; }
+  .hwn { width: 36px; height: 36px; background: #a855f7; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: #fff; flex-shrink: 0; }
+  .hwx { font-size: 18px; color: #cbd5e1; line-height: 1.45; }
+  .hwx strong { color: #fff; }
+  .tk { background: rgba(168,85,247,0.08); border: 1.5px solid rgba(168,85,247,0.2); border-radius: 16px; padding: 36px; display: flex; flex-direction: column; justify-content: center; }
+  .tki { font-size: 44px; margin-bottom: 16px; }
+  .tkl { font-size: 16px; font-weight: 800; color: #a855f7; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .tkt { font-size: 26px; font-weight: 600; color: #e2e8f0; line-height: 1.4; }
+  .footer { padding: 20px 0; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .author { display: flex; align-items: center; gap: 12px; }
+  .adot { width: 10px; height: 10px; background: #0D9488; border-radius: 50%; }
+  .an { font-size: 20px; font-weight: 700; color: #fff; }
+  .ah { font-size: 15px; color: #64748b; }
+  .pn { font-size: 20px; font-weight: 800; color: #475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-bar"></div>
+  <div class="header">
+    <div class="chapter-label">Chapter 02 — Who's In Control?</div>
+    <div class="demo-title">Agent Governance Dashboard</div>
+    <div class="demo-subtitle">Monitor agent behavior at scale — actions, overrides, and drift.</div>
+  </div>
+  <div class="browser-mockup">
+    <div class="browser-bar">
+      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+      <div class="burl"><span>janamaia.com</span>/lab/control#governance</div>
+    </div>
+    <div class="demo-content">
+      <div class="dash-header">
+        <div><div class="dash-title">Agent Governance Dashboard</div><div class="dash-sub">Live monitoring • Auto-refreshing</div></div>
+        <div class="drift-badge"><div class="drift-dot"></div><span class="drift-text">DRIFT: GREEN</span></div>
+      </div>
+      <div class="dash-grid">
+        <div class="feed">
+          <div class="feed-title">Activity Feed</div>
+          <div class="feed-row"><span class="feed-time">14:32:18</span><span class="feed-action">Risk assessment</span><span class="feed-status fs-completed">completed</span><span class="feed-conf">82%</span></div>
+          <div class="feed-row"><span class="feed-time">14:31:45</span><span class="feed-action">Email draft</span><span class="feed-status fs-overridden">overridden</span><span class="feed-conf">61%</span></div>
+          <div class="feed-row"><span class="feed-time">14:30:22</span><span class="feed-action">Report generation</span><span class="feed-status fs-completed">completed</span><span class="feed-conf">88%</span></div>
+          <div class="feed-row"><span class="feed-time">14:29:51</span><span class="feed-action">Schedule update</span><span class="feed-status fs-completed">completed</span><span class="feed-conf">75%</span></div>
+          <div class="feed-row"><span class="feed-time">14:28:10</span><span class="feed-action">Data extraction</span><span class="feed-status fs-completed">completed</span><span class="feed-conf">91%</span></div>
+          <div class="feed-row"><span class="feed-time">14:27:33</span><span class="feed-action">Compliance check</span><span class="feed-status fs-completed">completed</span><span class="feed-conf">79%</span></div>
+        </div>
+        <div class="side-panels">
+          <div class="panel">
+            <div class="panel-title">Override Rate</div>
+            <div class="donut-val">18%</div>
+            <div class="donut-label">of actions overridden</div>
+          </div>
+          <div class="panel">
+            <div class="panel-title">Drift Detection</div>
+            <div class="drift-bars"><div class="drift-bar drift-green"></div><div class="drift-bar drift-off"></div><div class="drift-bar drift-off"></div></div>
+            <div class="drift-desc">Within expected parameters</div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-bottom">
+        <div class="chart-panel">
+          <div class="panel-title" style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;margin-bottom:8px;">Confidence Distribution</div>
+          <div class="bar-chart">
+            <div class="bar" style="height:20%"></div>
+            <div class="bar" style="height:38%"></div>
+            <div class="bar" style="height:70%"></div>
+            <div class="bar" style="height:88%"></div>
+            <div class="bar" style="height:55%"></div>
+            <div class="bar" style="height:30%"></div>
+          </div>
+          <div class="bar-labels"><span>&lt;50</span><span>50-60</span><span>60-70</span><span>70-80</span><span>80-90</span><span>90+</span></div>
+        </div>
+        <div class="chart-panel">
+          <div class="panel-title" style="font-size:10px;color:#64748b;font-weight:700;text-transform:uppercase;margin-bottom:8px;">User Corrections</div>
+          <div class="correction"><span class="corr-time">14:32</span> User corrected risk level: Medium → High</div>
+          <div class="correction"><span class="corr-time">13:15</span> User modified report format preference</div>
+          <div class="correction"><span class="corr-time">11:48</span> User overrode scheduling suggestion</div>
+          <div class="correction"><span class="corr-time">10:22</span> User corrected domain terminology</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cards-row">
+    <div class="card">
+      <div class="card-label">Key Metric</div>
+      <div class="card-value">18%</div>
+      <div class="card-desc">Override rate — if >25%, agent needs retraining</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Monitors</div>
+      <div class="card-value">3</div>
+      <div class="card-desc">Override rate, confidence calibration, drift detection</div>
+    </div>
+  </div>
+  <div class="badges-row">
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Feed</div><div class="badge-value">Live</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Drift</div><div class="badge-value">Green</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Alerts</div><div class="badge-value">Auto</div></div></div>
+  </div>
+  <div class="bottom-row">
+    <div class="how">
+      <div class="hwt">How It Works</div>
+      <div class="hws"><div class="hwn">1</div><div class="hwx"><strong>Live feed</strong> — every agent action logged in real-time</div></div>
+      <div class="hws"><div class="hwn">2</div><div class="hwx"><strong>Override tracking</strong> — when humans disagree with AI</div></div>
+      <div class="hws"><div class="hwn">3</div><div class="hwx"><strong>Drift alerts</strong> — automatic warnings when behavior shifts</div></div>
+    </div>
+    <div class="tk">
+      <div class="tki">💡</div>
+      <div class="tkl">Design Insight</div>
+      <div class="tkt">Override rate is the single most important metric. High rates signal miscalibration, not user error.</div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="author"><div class="adot"></div><div><div class="an">Jana Maia</div><div class="ah">janamaia.com/lab</div></div></div>
+    <div class="pn">7 / 14</div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #0f172a; margin: 0; }
+  .slide { width: 1200px; height: 1500px; background: #0f172a; display: flex; flex-direction: column; overflow: hidden; padding: 0 32px; }
+  .top-bar { height: 6px; margin: 0 -32px; background: linear-gradient(90deg, #0D9488, #10B981, #0D9488); flex-shrink: 0; }
+  .header { padding: 40px 0 24px; flex-shrink: 0; }
+  .chapter-label { font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #ec4899; margin-bottom: 12px; }
+  .demo-title { font-size: 56px; font-weight: 900; color: #fff; line-height: 1.0; margin-bottom: 14px; }
+  .demo-subtitle { font-size: 24px; color: #cbd5e1; line-height: 1.35; }
+  .browser-mockup { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,0.25); flex-shrink: 0; }
+  .browser-bar { height: 40px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; padding: 0 16px; gap: 7px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dr { background: #ef4444; } .dy { background: #f59e0b; } .dg { background: #10b981; }
+  .burl { margin-left: 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 12px; font-size: 12px; color: #94a3b8; }
+  .burl span { color: #0D9488; font-weight: 600; }
+  .demo-content { padding: 24px; }
+  /* Pattern grid */
+  .pattern-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .pattern-card { padding: 12px; border-radius: 10px; border: 2px solid #e2e8f0; background: #f8fafc; }
+  .pattern-card.active { border-color: #ec4899; background: rgba(236,72,153,0.05); }
+  .pc-name { font-size: 14px; font-weight: 700; color: #334155; }
+  .pc-desc { font-size: 11px; color: #94a3b8; margin-top: 3px; line-height: 1.4; }
+  /* Demo chat */
+  .demo-chat { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; }
+  .chat-msg { margin-bottom: 10px; }
+  .chat-msg.user { text-align: right; }
+  .chat-bubble { display: inline-block; max-width: 85%; padding: 10px 14px; border-radius: 10px; font-size: 13px; line-height: 1.5; text-align: left; }
+  .chat-msg.user .chat-bubble { background: #ec4899; color: #fff; }
+  .chat-msg.agent .chat-bubble { background: #fff; border: 1.5px solid #e2e8f0; color: #334155; }
+  .confirm-list { margin: 8px 0; }
+  .confirm-item { font-size: 12px; color: #64748b; margin-bottom: 2px; }
+  .btn { display: inline-block; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; background: #ec4899; color: white; margin-top: 8px; }
+  /* Insight bar */
+  .insight-bar { display: flex; align-items: start; gap: 8px; padding: 12px; background: rgba(236,72,153,0.06); border: 1.5px solid rgba(236,72,153,0.15); border-radius: 10px; margin-top: 16px; }
+  .insight-icon { font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+  .insight-text { font-size: 12px; color: #64748b; line-height: 1.5; }
+  .cards-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; flex-shrink: 0; }
+  .card { background: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155; }
+  .card-label { font-size: 15px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .card-value { font-size: 56px; font-weight: 900; color: #ec4899; line-height: 1; }
+  .card-desc { font-size: 17px; color: #94a3b8; margin-top: 10px; line-height: 1.4; }
+  .badges-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 16px; flex-shrink: 0; }
+  .badge { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 12px; }
+  .badge-dot { width: 10px; height: 10px; border-radius: 50%; background: #ec4899; flex-shrink: 0; }
+  .badge-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .badge-value { font-size: 20px; font-weight: 800; color: #fff; }
+  .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; flex: 1; }
+  .how { background: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155; display: flex; flex-direction: column; justify-content: center; }
+  .hwt { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .hws { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px; }
+  .hwn { width: 36px; height: 36px; background: #ec4899; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: #fff; flex-shrink: 0; }
+  .hwx { font-size: 18px; color: #cbd5e1; line-height: 1.45; }
+  .hwx strong { color: #fff; }
+  .tk { background: rgba(236,72,153,0.08); border: 1.5px solid rgba(236,72,153,0.2); border-radius: 16px; padding: 36px; display: flex; flex-direction: column; justify-content: center; }
+  .tki { font-size: 44px; margin-bottom: 16px; }
+  .tkl { font-size: 16px; font-weight: 800; color: #ec4899; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .tkt { font-size: 26px; font-weight: 600; color: #e2e8f0; line-height: 1.4; }
+  .footer { padding: 20px 0; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .author { display: flex; align-items: center; gap: 12px; }
+  .adot { width: 10px; height: 10px; background: #0D9488; border-radius: 50%; }
+  .an { font-size: 20px; font-weight: 700; color: #fff; }
+  .ah { font-size: 15px; color: #64748b; }
+  .pn { font-size: 20px; font-weight: 800; color: #475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-bar"></div>
+  <div class="header">
+    <div class="chapter-label">Chapter 02 — Who's In Control?</div>
+    <div class="demo-title">AG-UI Interaction Patterns</div>
+    <div class="demo-subtitle">Six foundational patterns every agentic interface should implement.</div>
+  </div>
+  <div class="browser-mockup">
+    <div class="browser-bar">
+      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+      <div class="burl"><span>janamaia.com</span>/lab/control#patterns</div>
+    </div>
+    <div class="demo-content">
+      <div class="pattern-grid">
+        <div class="pattern-card active"><div class="pc-name">Intent Capture</div><div class="pc-desc">Confirms what user wants before acting</div></div>
+        <div class="pattern-card"><div class="pc-name">Action Preview</div><div class="pc-desc">Shows what will happen before executing</div></div>
+        <div class="pattern-card"><div class="pc-name">Confirmation Loops</div><div class="pc-desc">Multi-step approval for complex ops</div></div>
+        <div class="pattern-card"><div class="pc-name">Reversible Actions</div><div class="pc-desc">Undo capability for agent changes</div></div>
+        <div class="pattern-card"><div class="pc-name">Progressive Disclosure</div><div class="pc-desc">Reveals complexity gradually</div></div>
+        <div class="pattern-card"><div class="pc-name">Feedback Signals</div><div class="pc-desc">Shows comprehension before action</div></div>
+      </div>
+      <div class="demo-chat">
+        <div class="chat-msg user"><div class="chat-bubble">Schedule a meeting about Q2 launch</div></div>
+        <div class="chat-msg agent">
+          <div class="chat-bubble">
+            <strong>Before I schedule, let me confirm:</strong>
+            <div class="confirm-list">
+              <div class="confirm-item">→ <strong>Team:</strong> Product team (8 people)?</div>
+              <div class="confirm-item">→ <strong>Duration:</strong> 60 minutes?</div>
+              <div class="confirm-item">→ <strong>When:</strong> This week?</div>
+            </div>
+            <div class="btn">Yes, that's right</div>
+          </div>
+        </div>
+      </div>
+      <div class="insight-bar">
+        <div class="insight-icon">💡</div>
+        <div class="insight-text">Prevents solving the wrong problem confidently.</div>
+      </div>
+    </div>
+  </div>
+  <div class="cards-row">
+    <div class="card">
+      <div class="card-label">Patterns</div>
+      <div class="card-value">6</div>
+      <div class="card-desc">Intent, Preview, Confirm, Undo, Progressive, Feedback</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Autonomy Boost</div>
+      <div class="card-value">3×</div>
+      <div class="card-desc">Users grant 3× more autonomy when they can undo</div>
+    </div>
+  </div>
+  <div class="badges-row">
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Foundation</div><div class="badge-value">Grammar</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Core</div><div class="badge-value">Undo</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Mode</div><div class="badge-value">Interactive</div></div></div>
+  </div>
+  <div class="bottom-row">
+    <div class="how">
+      <div class="hwt">How It Works</div>
+      <div class="hws"><div class="hwn">1</div><div class="hwx"><strong>Pick a pattern</strong> — each shows a live interaction demo</div></div>
+      <div class="hws"><div class="hwn">2</div><div class="hwx"><strong>Interact with it</strong> — approve, reject, undo, expand</div></div>
+      <div class="hws"><div class="hwn">3</div><div class="hwx"><strong>See the annotation</strong> — why this pattern matters</div></div>
+    </div>
+    <div class="tk">
+      <div class="tki">💡</div>
+      <div class="tkl">Design Insight</div>
+      <div class="tkt">Reversibility is the foundation. When users can undo, they're 3× more likely to grant higher autonomy.</div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="author"><div class="adot"></div><div><div class="an">Jana Maia</div><div class="ah">janamaia.com/lab</div></div></div>
+    <div class="pn">8 / 14</div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #0f172a; margin: 0; }
+  .slide { width: 1200px; height: 1500px; background: #0f172a; display: flex; flex-direction: column; overflow: hidden; padding: 0 32px; }
+  .top-bar { height: 6px; margin: 0 -32px; background: linear-gradient(90deg, #0D9488, #10B981, #0D9488); flex-shrink: 0; }
+  .header { padding: 40px 0 24px; flex-shrink: 0; }
+  .chapter-label { font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #10B981; margin-bottom: 12px; }
+  .demo-title { font-size: 68px; font-weight: 900; color: #fff; line-height: 1.0; margin-bottom: 14px; }
+  .demo-subtitle { font-size: 26px; color: #cbd5e1; line-height: 1.35; }
+  .browser-mockup { background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,0.25); flex-shrink: 0; }
+  .browser-bar { height: 40px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; padding: 0 16px; gap: 7px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dr { background: #ef4444; } .dy { background: #f59e0b; } .dg { background: #10b981; }
+  .burl { margin-left: 12px; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 5px 12px; font-size: 12px; color: #94a3b8; }
+  .burl span { color: #0D9488; font-weight: 600; }
+  .demo-content { padding: 24px; }
+  .controls { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+  .switch-row { display: flex; align-items: center; gap: 10px; }
+  .switch { width: 44px; height: 24px; background: #0D9488; border-radius: 12px; position: relative; }
+  .switch-dot { width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; top: 2px; right: 2px; }
+  .switch-label { font-size: 14px; color: #64748b; }
+  .btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; border: none; background: #0D9488; color: white; }
+  .thinking-box { background: #f8fafc; border-radius: 12px; padding: 20px; border: 1.5px solid #e2e8f0; min-height: 260px; }
+  .thinking-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+  .pulse-dot { width: 6px; height: 6px; background: #0D9488; border-radius: 50%; }
+  .thinking-steps { border-left: 2px solid rgba(13,148,136,0.3); padding-left: 14px; margin-bottom: 16px; }
+  .step { font-size: 13px; font-family: monospace; color: #64748b; margin-bottom: 4px; line-height: 1.5; }
+  .answer { font-size: 15px; color: #334155; line-height: 1.6; padding-top: 12px; border-top: 1px solid #e2e8f0; }
+  .cards-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; flex-shrink: 0; }
+  .card { background: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155; }
+  .card-label { font-size: 15px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .card-value { font-size: 56px; font-weight: 900; color: #10B981; line-height: 1; }
+  .card-desc { font-size: 17px; color: #94a3b8; margin-top: 10px; line-height: 1.4; }
+  .badges-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-top: 16px; flex-shrink: 0; }
+  .badge { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 12px; }
+  .badge-dot { width: 10px; height: 10px; border-radius: 50%; background: #10B981; flex-shrink: 0; }
+  .badge-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .badge-value { font-size: 20px; font-weight: 800; color: #fff; }
+  .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; flex: 1; }
+  .how { background: #1e293b; border-radius: 16px; padding: 32px; border: 1px solid #334155; display: flex; flex-direction: column; justify-content: center; }
+  .hwt { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .hws { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px; }
+  .hwn { width: 36px; height: 36px; background: #0D9488; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: #fff; flex-shrink: 0; }
+  .hwx { font-size: 18px; color: #cbd5e1; line-height: 1.45; }
+  .hwx strong { color: #fff; }
+  .tk { background: rgba(13,148,136,0.08); border: 1.5px solid rgba(13,148,136,0.2); border-radius: 16px; padding: 36px; display: flex; flex-direction: column; justify-content: center; }
+  .tki { font-size: 44px; margin-bottom: 16px; }
+  .tkl { font-size: 16px; font-weight: 800; color: #10B981; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+  .tkt { font-size: 26px; font-weight: 600; color: #e2e8f0; line-height: 1.4; }
+  .footer { padding: 20px 0; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .author { display: flex; align-items: center; gap: 12px; }
+  .adot { width: 10px; height: 10px; background: #0D9488; border-radius: 50%; }
+  .an { font-size: 20px; font-weight: 700; color: #fff; }
+  .ah { font-size: 15px; color: #64748b; }
+  .pn { font-size: 20px; font-weight: 800; color: #475569; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top-bar"></div>
+  <div class="header">
+    <div class="chapter-label">Chapter 01 — Can You Trust This?</div>
+    <div class="demo-title">Thinking Transparency</div>
+    <div class="demo-subtitle">Should users see how the agent reasons? The sweet spot is nuanced.</div>
+  </div>
+  <div class="browser-mockup">
+    <div class="browser-bar">
+      <div class="dot dr"></div><div class="dot dy"></div><div class="dot dg"></div>
+      <div class="burl"><span>janamaia.com</span>/lab/trust#thinking</div>
+    </div>
+    <div class="demo-content">
+      <div class="controls">
+        <div class="switch-row">
+          <div class="switch"><div class="switch-dot"></div></div>
+          <div class="switch-label">Show thinking</div>
+        </div>
+        <div class="btn">🧠 Thinking...</div>
+      </div>
+      <div class="thinking-box">
+        <div class="thinking-header"><div class="pulse-dot"></div> Reasoning complete</div>
+        <div class="thinking-steps" style="opacity: 0.6;">
+          <div class="step">Parsing user query: 'best restaurant for anniversary dinner'</div>
+          <div class="step">Identifying key criteria: romantic, special occasion, high quality</div>
+          <div class="step">Searching database: 847 restaurants in area</div>
+          <div class="step">Filtering: romantic ambiance, rating ≥ 4.5, fine dining</div>
+          <div class="step">Cross-referencing with recent reviews (last 90 days)</div>
+          <div class="step">Ranking by: atmosphere (40%), food quality (35%), service (25%)</div>
+          <div class="step">Top result confidence: 94%</div>
+        </div>
+        <div class="answer">I'd recommend <strong>Aria</strong> — it's consistently rated the best for special occasions. Intimate lighting, a seasonal tasting menu, and impeccable service. Book the corner table by the window for the best experience.</div>
+      </div>
+    </div>
+  </div>
+  <div class="cards-row">
+    <div class="card">
+      <div class="card-label">Trust Increase</div>
+      <div class="card-value">+34%</div>
+      <div class="card-desc">When reasoning steps are shown to users in studies</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Sweet Spot</div>
+      <div class="card-value" style="font-size:36px">On Demand</div>
+      <div class="card-desc">Show thinking on request, summarize by default</div>
+    </div>
+  </div>
+  <div class="badges-row">
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Steps</div><div class="badge-value">7</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Mode</div><div class="badge-value">Toggle</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">Result</div><div class="badge-value">94%</div></div></div>
+    <div class="badge"><div class="badge-dot"></div><div><div class="badge-label">UX</div><div class="badge-value">Progressive</div></div></div>
+  </div>
+  <div class="bottom-row">
+    <div class="how">
+      <div class="hwt">How It Works</div>
+      <div class="hws"><div class="hwn">1</div><div class="hwx"><strong>Toggle thinking</strong> — show or hide the reasoning chain</div></div>
+      <div class="hws"><div class="hwn">2</div><div class="hwx"><strong>Watch it reason</strong> — steps appear one by one in real-time</div></div>
+      <div class="hws"><div class="hwn">3</div><div class="hwx"><strong>See the answer</strong> — reasoning fades, final answer stays</div></div>
+    </div>
+    <div class="tk">
+      <div class="tki">💡</div>
+      <div class="tkl">Design Insight</div>
+      <div class="tkt">Showing reasoning increases trust by 34%. But too much overwhelms. Progressive disclosure is the answer.</div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="author"><div class="adot"></div><div><div class="an">Jana Maia</div><div class="ah">janamaia.com/lab</div></div></div>
+    <div class="pn">4 / 14</div>
+  </div>
+</div>
+</body>
+</html>

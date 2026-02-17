@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0f172a;
+    margin: 0;
+  }
+  
+  .slide {
+    width: 1200px;
+    height: 1500px;
+    background: #0f172a;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Top bar with teal accent */
+  .top-bar {
+    height: 6px;
+    background: linear-gradient(90deg, #0D9488, #10B981);
+  }
+  
+  /* Header area */
+  .header {
+    padding: 48px 64px 32px;
+  }
+  
+  .chapter-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #0D9488;
+    margin-bottom: 10px;
+  }
+  
+  .demo-number {
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    margin-bottom: 6px;
+  }
+  
+  .demo-title {
+    font-size: 44px;
+    font-weight: 800;
+    color: #f1f5f9;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  
+  .demo-subtitle {
+    font-size: 18px;
+    font-weight: 400;
+    color: #94a3b8;
+    line-height: 1.5;
+    max-width: 700px;
+  }
+  
+  /* Demo preview area */
+  .demo-preview {
+    margin: 0 48px;
+    background: #1e293b;
+    border-radius: 16px;
+    border: 1px solid rgba(16, 185, 129, 0.15);
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .demo-window-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #10b981; }
+  
+  .demo-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-left: auto;
+  }
+  
+  /* Calibration Lab specific demo content */
+  .controls-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  
+  .control-group {
+    flex: 1;
+  }
+  
+  .control-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  
+  .slider-track {
+    height: 6px;
+    background: #334155;
+    border-radius: 3px;
+    position: relative;
+  }
+  
+  .slider-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0D9488, #10B981);
+    border-radius: 3px;
+    width: 70%;
+  }
+  
+  .slider-thumb {
+    width: 18px;
+    height: 18px;
+    background: white;
+    border: 3px solid #0D9488;
+    border-radius: 50%;
+    position: absolute;
+    top: -6px;
+    left: 67%;
+  }
+  
+  .slider-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-top: 8px;
+  }
+  
+  .pill-row {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .pill {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: #94a3b8;
+  }
+  
+  .pill.active {
+    background: #0D9488;
+    color: white;
+    border-color: #0D9488;
+  }
+  
+  /* Agent Response */
+  .agent-response {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 20px;
+    border: 1px solid #334155;
+  }
+  
+  .response-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  
+  .response-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #0D9488, #10B981);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+  }
+  
+  .response-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+  
+  .response-badge {
+    margin-left: auto;
+    padding: 4px 12px;
+    background: rgba(13, 148, 136, 0.15);
+    color: #10B981;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  
+  .response-text {
+    font-size: 15px;
+    color: #cbd5e1;
+    line-height: 1.7;
+  }
+  
+  .response-text strong {
+    color: #f1f5f9;
+  }
+  
+  .response-warning {
+    margin-top: 16px;
+    padding: 10px 16px;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 8px;
+    font-size: 13px;
+    color: #fbbf24;
+  }
+  
+  .response-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    background: #0D9488;
+    color: white;
+  }
+  
+  .btn-secondary {
+    background: #1e293b;
+    color: #94a3b8;
+    border: 1px solid #334155;
+  }
+  
+  /* Insight strip */
+  .insight-strip {
+    margin: 24px 48px 0;
+    padding: 20px 28px;
+    background: rgba(13, 148, 136, 0.08);
+    border: 1px solid rgba(13, 148, 136, 0.15);
+    border-radius: 12px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .insight-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  
+  .insight-strip .insight-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #10B981;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+  
+  .insight-strip .insight-text {
+    font-size: 15px;
+    color: #cbd5e1;
+    line-height: 1.5;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 32px 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .author-dot {
+    width: 10px;
+    height: 10px;
+    background: #0D9488;
+    border-radius: 50%;
+  }
+  
+  .author-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #f1f5f9;
+  }
+  
+  .author-handle {
+    font-size: 14px;
+    color: #94a3b8;
+  }
+  
+  .page-num {
+    font-size: 16px;
+    font-weight: 700;
+    color: #94a3b8;
+  }
+  
+  /* Insight card */
+  .insight-card {
+    background: #f0fdfa;
+    border: 1px solid #ccfbf1;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 20px;
+  }
+  
+  .insight-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0D9488;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  
+  .insight-text {
+    font-size: 15px;
+    color: #334155;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Cover -->
+<div class="slide" id="slide-cover" style="background: #0f172a; justify-content: center; align-items: center; text-align: center;">
+  <div class="top-bar" style="position: absolute; top: 0; left: 0; right: 0;"></div>
+  <div style="padding: 80px;">
+    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #0D9488, #10B981); border-radius: 20px; margin: 0 auto 40px; display: flex; align-items: center; justify-content: center;">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+    </div>
+    <div style="font-size: 16px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #0D9488; margin-bottom: 24px;">AG-UI Design Lab</div>
+    <div style="font-size: 56px; font-weight: 800; color: white; line-height: 1.15; margin-bottom: 24px;">Designing the Layer<br><span style="color: #10B981;">Between AI & Humans</span></div>
+    <div style="font-size: 22px; color: #94a3b8; max-width: 600px; margin: 0 auto; line-height: 1.5;">13 interactive prototypes exploring trust, control, and learning in agent-powered products.</div>
+    <div style="margin-top: 60px; display: flex; gap: 40px; justify-content: center;">
+      <div><div style="font-size: 36px; font-weight: 800; color: #10B981;">13</div><div style="font-size: 14px; color: #64748b;">Demos</div></div>
+      <div><div style="font-size: 36px; font-weight: 800; color: #10B981;">3</div><div style="font-size: 14px; color: #64748b;">Chapters</div></div>
+      <div><div style="font-size: 36px; font-weight: 800; color: #10B981;">1</div><div style="font-size: 14px; color: #64748b;">Protocol</div></div>
+    </div>
+  </div>
+  <div class="footer" style="position: absolute; bottom: 0; left: 0; right: 0;">
+    <div class="author">
+      <div class="author-dot"></div>
+      <div>
+        <div class="author-name" style="color: white;">Jana Maia</div>
+        <div class="author-handle">janamaia.com/lab</div>
+      </div>
+    </div>
+    <div class="page-num">1 / 14</div>
+  </div>
+</div>
+
+<!-- SLIDE 2: Demo 01 - Calibration Lab -->
+<div class="slide" id="slide-demo01">
+  <div class="top-bar"></div>
+  <div class="header">
+    <div class="chapter-label">Chapter 01 — Can You Trust This?</div>
+    <div class="demo-number">Demo 01</div>
+    <div class="demo-title">Calibration Lab</div>
+    <div class="demo-subtitle">How confidence, verbosity, and domain interact to shape what an agent says.</div>
+  </div>
+  
+  <div class="demo-preview">
+    <div class="demo-window-bar">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+      <div class="demo-label">Interactive Demo</div>
+    </div>
+    
+    <div class="controls-row">
+      <div class="control-group">
+        <div class="control-label">AI Confidence — 70%</div>
+        <div class="slider-track">
+          <div class="slider-fill"></div>
+          <div class="slider-thumb"></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="control-label">Domain Mode</div>
+        <div class="pill-row">
+          <div class="pill">🎨 Creative</div>
+          <div class="pill active">⚖️ Regulated</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="controls-row">
+      <div class="control-group">
+        <div class="control-label">Verbosity</div>
+        <div class="pill-row">
+          <div class="pill">Minimal</div>
+          <div class="pill active">Balanced</div>
+          <div class="pill">Detailed</div>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="control-label">Persona</div>
+        <div class="pill-row">
+          <div class="pill active">🌱 Novice</div>
+          <div class="pill">⚡ Expert</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="agent-response">
+      <div class="response-header">
+        <div class="response-icon">🤖</div>
+        <div class="response-title">Agent Response</div>
+        <div class="response-badge">Regulated Mode</div>
+      </div>
+      <div class="response-text">
+        The geotechnical data indicates likely low-risk. I'm reasonably confident, but there are data gaps.<br><br>
+        <strong>Found:</strong> Good bearing capacity, deep water table.<br>
+        <strong>Concern:</strong> Only 3 boreholes for a large site.
+      </div>
+      <div class="response-warning">⚠️ Preliminary automated assessment. [Ref: AS 1726-2017]</div>
+      <div class="response-actions">
+        <div class="btn btn-primary">Accept Recommendation</div>
+        <div class="btn btn-secondary">Modify</div>
+      </div>
+    </div>
+    
+    <!-- Autonomy indicator -->
+    <div style="display: flex; gap: 16px; margin-top: 20px; padding: 16px 20px; background: #0f172a; border-radius: 10px; border: 1px solid #334155;">
+      <div style="flex:1; text-align: center;">
+        <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Confidence</div>
+        <div style="font-size: 28px; font-weight: 800; color: #10B981;">70%</div>
+      </div>
+      <div style="width: 1px; background: #334155;"></div>
+      <div style="flex:1; text-align: center;">
+        <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Verbosity</div>
+        <div style="font-size: 28px; font-weight: 800; color: #10B981;">Balanced</div>
+      </div>
+      <div style="width: 1px; background: #334155;"></div>
+      <div style="flex:1; text-align: center;">
+        <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Domain</div>
+        <div style="font-size: 28px; font-weight: 800; color: #10B981;">Regulated</div>
+      </div>
+      <div style="width: 1px; background: #334155;"></div>
+      <div style="flex:1; text-align: center;">
+        <div style="font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Persona</div>
+        <div style="font-size: 28px; font-weight: 800; color: #10B981;">Novice</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="insight-strip">
+    <div class="insight-icon">💡</div>
+    <div>
+      <div class="insight-label">Design Insight</div>
+      <div class="insight-text">Trust isn't binary. The same output can build or destroy trust depending on how uncertainty is communicated. Users need agents to be honest about what they don't know.</div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <div class="author">
+      <div class="author-dot"></div>
+      <div>
+        <div class="author-name">Jana Maia</div>
+        <div class="author-handle">janamaia.com/lab</div>
+      </div>
+    </div>
+    <div class="page-num">2 / 14</div>
+  </div>
+</div>
+
+</body>
+</html>
